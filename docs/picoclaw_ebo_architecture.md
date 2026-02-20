@@ -2,6 +2,15 @@
 
 This document captures the architecture direction for Project PicoClaw-Ebo: a hybrid AI stack that combines low-latency, on-device perception with cloud-based reasoning. The approach prioritizes safety, responsiveness, and reliability inside a thermally constrained mobile chassis.
 
+Scope of this document:
+- Architecture decisions and rationale.
+- System boundaries, interfaces, and constraints.
+- Technical trade-offs that affect implementation.
+
+Out of scope:
+- Step-by-step operational commands (see `QUICKSTART_SIMULATION.md`).
+- Day-to-day simulation execution logs (see `QUICKSTART_SIMULATION.md`).
+
 ## Goals
 
 - Deliver real-time perception and navigation locally, independent of network latency.

@@ -11,39 +11,46 @@
 
 ![PicoClaw-Ebo](assets/picoclaw-ebo.png)
 
-Project PicoClaw-Ebo is a hybrid AI and mobile robotics integration that combines the PicoClaw autonomous agent with the Enabot Ebo Air 2 chassis. The system embeds a LicheeRV Nano development board (SOPHGO SG2002 SoC) to deliver low-latency, on-device vision while delegating higher-level reasoning and conversation to cloud LLMs. The result is a robot that remains reactive and safe locally, while still being capable of rich cognitive interaction.
+PicoClaw-Ebo combines the PicoClaw autonomous agent with an Enabot Ebo Air 2 chassis and a LicheeRV Nano (SG2002). The platform is designed around a hybrid model: low-latency local perception/control plus cloud reasoning.
 
-## System Summary
+## Quick Summary
 
 - Local intelligence: SG2002 NPU for real-time YOLO inference and safety-critical perception.
 - Cloud intelligence: LLMs for semantic reasoning, identity verification, and conversation.
-- Ultra-lightweight core: PicoClaw in Go, under 10MB RAM, sub-second boot.
+- Lightweight core: PicoClaw in Go with low memory footprint.
 - Control bridge: Python BLE emulation layer to command the Ebo motors.
-- Low-latency media: WebRTC for 2-way audio and video streaming.
-- Shared memory IPC: Zero-copy coordination between inference and control loops.
+- Media/control split: WebRTC for low-latency media, TCP/WebSocket for control and state.
 
-## Hardware Integration
+## Build
 
-The Ebo Air 2 chassis is compact and thermally constrained. The LicheeRV Nano is integrated with careful attention to power stability, thermal limits, and battery safety. A dedicated MT3608 boost converter lifts the 3.0V to 4.2V battery range to a stable 5.0V rail for the SG2002.
+Prerequisites:
+- Go toolchain available in `PATH` (`go version`)
+- GNU Make
 
-Key hardware notes:
-- Chassis size and weight require tight internal load balancing.
-- PC+ABS shell traps heat, so thermal monitoring is mandatory.
-- Power tap must occur after the battery management system (BMS).
-- Motor-induced voltage sags are mitigated with input bulk capacitance.
+Common commands:
 
-## Control Bridge
+```bash
+make deps
+make build
+```
 
-The Ebo Air 2 is proprietary, so motor control is implemented via a Python gateway that emulates the original BLE protocol. The gateway translates high-level commands into low-level GATT writes and prioritizes safety-critical actions (e.g., STOP) through a fast command queue.
+Cross-platform binaries:
 
-## Edge AI Pipeline
+```bash
+make build-all
+```
 
-The SG2002 NPU provides the local perception layer with INT8-quantized YOLO models for real-time tracking. Shared-memory IPC enables zero-copy transfer of detection data between the C++ inference engine and the Python gateway, preventing memory pressure on the 256MB LicheeRV Nano.
+Build outputs:
+- Host build: `build/picoclaw-<os>-<arch>`
+- Multi-target build artifacts: `build/picoclaw-linux-amd64`, `build/picoclaw-linux-arm64`, `build/picoclaw-linux-loong64`, `build/picoclaw-linux-riscv64`, `build/picoclaw-darwin-arm64`, `build/picoclaw-windows-amd64.exe`
 
-## Connectivity
+Build note:
+- `go generate` prepares embedded workspace assets for onboarding.
+- The generate rule excludes heavy local emulation artifacts (`workspace/emulation/buildroot`, `workspace/emulation/riscv64`) to keep build time and binary size under control.
 
-WebRTC is used for full-duplex, low-latency audio and video streaming. WebSocket or similar TCP channels are reserved for control commands and state updates where delivery guarantees matter more than latency.
+## Documentation Map
 
-## Documentation
-
-- Architecture approach: `docs/picoclaw_ebo_architecture.md`
+- `README.md` (this file): project entry point and build commands.
+- `docs/picoclaw_ebo_architecture.md`: architecture decisions, technical constraints, interfaces.
+- `docs/picoclaw_ebo_development_simulation.md`: simulation/development strategy and workflows.
+- `QUICKSTART_SIMULATION.md`: validated operational runbook with concrete commands and results.

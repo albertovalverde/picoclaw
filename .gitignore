@@ -11,6 +11,10 @@ build/
 /picoclaw
 /picoclaw-test
 cmd/picoclaw/workspace
+workspace/emulation/buildroot/
+workspace/emulation/riscv64/
+!workspace/emulation/scripts/
+!workspace/emulation/scripts/*.sh
 
 # Picoclaw specific
 

@@ -13,7 +13,7 @@ import (
 	"github.com/sipeed/picoclaw/pkg/config"
 )
 
-//go:generate cp -r ../../workspace .
+//go:generate sh -c "rm -rf workspace && mkdir -p workspace && rsync -a --delete --exclude='emulation/buildroot/***' --exclude='emulation/riscv64/***' ../../workspace/ workspace/"
 //go:embed workspace
 var embeddedFiles embed.FS
 

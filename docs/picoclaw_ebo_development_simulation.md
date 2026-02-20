@@ -2,6 +2,18 @@
 
 This document proposes a professional simulation strategy for Project PicoClaw-Ebo, combining hardware emulation of the Sipeed LicheeRV Nano with physics-based simulation of the Enabot Ebo Air 2 chassis. The goal is to enable rapid, repeatable development without requiring continuous access to physical hardware.
 
+Scope of this document:
+- Development and simulation strategy.
+- Choice of tools, abstraction levels, and integration workflow.
+- Sim-to-real methodology.
+
+Out of scope:
+- Command-by-command setup and environment-specific execution logs.
+- Operational troubleshooting records.
+
+Operational runbook:
+- Use `QUICKSTART_SIMULATION.md` for validated commands and execution status.
+
 ## 1. Executive Summary
 
 The proposed framework establishes a high-fidelity environment to validate the PicoClaw autonomous agent by separating the system into two domains:
