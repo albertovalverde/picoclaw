@@ -1,5 +1,16 @@
 # PicoClaw-Ebo
 
+![Go](https://img.shields.io/badge/Go-1.21+-00ADD8?style=flat)
+![Python](https://img.shields.io/badge/Python-3.x-3776AB?style=flat)
+![RISC-V](https://img.shields.io/badge/RISC--V-64--bit-283272?style=flat)
+![WebRTC](https://img.shields.io/badge/WebRTC-Real--Time-333333?style=flat)
+![BLE](https://img.shields.io/badge/BLE-5.0-0082FC?style=flat)
+![YOLO](https://img.shields.io/badge/YOLO-INT8-111111?style=flat)
+![MuJoCo](https://img.shields.io/badge/MuJoCo-Sim-00599C?style=flat)
+![QEMU](https://img.shields.io/badge/QEMU-Emulation-9C27B0?style=flat)
+
+![PicoClaw-Ebo](assets/picoclaw-ebo.png)
+
 Project PicoClaw-Ebo is a hybrid AI and mobile robotics integration that combines the PicoClaw autonomous agent with the Enabot Ebo Air 2 chassis. The system embeds a LicheeRV Nano development board (SOPHGO SG2002 SoC) to deliver low-latency, on-device vision while delegating higher-level reasoning and conversation to cloud LLMs. The result is a robot that remains reactive and safe locally, while still being capable of rich cognitive interaction.
 
 ## System Summary
