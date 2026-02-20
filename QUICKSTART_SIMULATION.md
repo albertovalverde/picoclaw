@@ -58,6 +58,12 @@ Ignored:
 - Action: Revised repository policy to official scope only.
 - Result: Kept docs/scripts in Git and excluded heavy emulation assets (`buildroot`, `riscv64` artifacts).
 - Next action: Keep Buildroot source and images local, regenerate as needed.
+- Action: Started section `5` by creating `.venv` and installing simulation Python dependencies (`mujoco`, `pybullet`, `pyzmq`, `websockets`, `opencv-python`).
+- Result: `.venv` created successfully, but package installation failed due to network/DNS resolution errors (`Could not resolve host` / `No matching distribution found for mujoco`).
+- Next action: Re-run section `5` on a host with internet access (or with an internal Python package mirror), then continue with sections `6-9`.
+- Action: Added explicit steps to edit PicoClaw config in simulation quick start.
+- Result: Document now includes host and guest paths, model/API key edits, env override examples, and validation commands.
+- Next action: Apply the new config flow during the next QEMU boot validation run.
 
 ## Validated Status (2026-02-20)
 
@@ -256,6 +262,76 @@ Optional SSH path:
 Goal:
 - Verify stable boot and runtime behavior within 256MB.
 - Validate that `config.json` and startup flow behave as expected.
+
+### 4.4 Edit PicoClaw Config (`config.json`)
+
+PicoClaw reads config from:
+
+```text
+~/.picoclaw/config.json
+```
+
+In this repository, use the example as the base:
+
+```bash
+mkdir -p ~/.picoclaw
+cp config/config.example.json ~/.picoclaw/config.json
+```
+
+Edit it:
+
+```bash
+vi ~/.picoclaw/config.json
+```
+
+Minimum fields to adjust:
+- `agents.defaults.model`: model alias to use by default (must exist in `model_list`)
+- `model_list[].api_key`: set your real API key
+- `model_list[].api_base`: confirm provider endpoint if needed
+
+Groq example (`gpt-oss-120b`) in `~/.picoclaw/config.json`:
+
+```json
+{
+  "agents": {
+    "defaults": {
+      "model": "groq-gpt-oss-120b"
+    }
+  },
+  "model_list": [
+    {
+      "model_name": "groq-gpt-oss-120b",
+      "model": "groq/openai/gpt-oss-120b",
+      "api_key": "gsk_your_groq_key",
+      "api_base": "https://api.groq.com/openai/v1"
+    }
+  ]
+}
+```
+
+Quick validation on host:
+
+```bash
+./build/picoclaw-linux-amd64 status
+./build/picoclaw-linux-amd64 agent -m "health check"
+```
+
+For guest (riscv64) validation, place config in guest home:
+
+```bash
+mkdir -p /root/.picoclaw
+cp /path/to/config.json /root/.picoclaw/config.json
+chmod 600 /root/.picoclaw/config.json
+/root/picoclaw status
+/root/picoclaw agent -m "health check"
+```
+
+Optional environment variable override examples:
+
+```bash
+export PICOCLAW_AGENTS_DEFAULTS_MODEL=gpt-5.2
+export PICOCLAW_TOOLS_WEB_BRAVE_ENABLED=true
+```
 
 ## 5. Create a Local Simulation Environment
 

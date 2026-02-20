@@ -45,6 +45,8 @@ tasks/
 # Editors
 .vscode/
 .idea/
+.venv/
+notas.md
 
 # Added by goreleaser init:
 dist/
